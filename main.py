@@ -143,7 +143,7 @@ def main():
 
     KangarooMatrix = nx.to_numpy_matrix(KangarooGraph)
     plt.matshow(KangarooMatrix)
-    #plt.show()
+    plt.show()
     # Part G:
 
 
