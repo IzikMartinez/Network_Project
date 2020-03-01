@@ -2,11 +2,13 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import statistics as stat
 
 
 # Create Network: This function is to create a network based on the provided information
 # in the Kangaroo and Bison Network files.
 # Parameters: The Imported, created Graph and The Lines from that Graph
+
 def CreateNetwork (Graph,File,flag):
     Opened_File = open(File, 'r')
     Lines = Opened_File.readlines()
@@ -53,6 +55,12 @@ def TreeOrForest(Graph):
     else:
         print("Neither a Tree nor Forest")
 
+def Stats(LIST):
+    mean = stat.mean(LIST)
+    std_Deviation = stat.stdev(LIST)
+    xLabel = 'Mean = ' + str(mean) + ' & Standard Deviation = ' + str(std_Deviation)
+    return xLabel
+
 # Main Function for the program.
 def main():
     #Directed Bison Network
@@ -90,23 +98,32 @@ def main():
     for node in range(1,26):
         BisonDegrees.append(BisonGraph.degree(node))
 
+    # Computing Mean and Standard Deviation for Directed
+    xLabel = Stats(BisonDegrees)
+
     # Creating a Histogram to plot the data of the degrees Bison Network
     plt.figure(3)
     plt.title('Part B: Histogram Directed Bison')
-    plt.hist(BisonDegrees,bins = 17)
+    plt.xlabel(xLabel)
+    plt.hist(BisonDegrees,bins = 'auto')
 
     # Creation of an arrayList to store the degree for each node of Kangaroo Network
     KangarooDegrees = []
     for node in range(1,17):
         KangarooDegrees.append(KangarooGraph.degree(node))
 
+    # Computing Mean and Standard Deviation for Undirected
+    xLabel = Stats(KangarooDegrees)
+
     # Creating a Histogram to plot the data of the degrees for Kangaroo Network
     plt.figure(4)
     plt.title('Part B: Histogram Undirected Kangaroo')
-    plt.hist(KangarooDegrees,bins = 9)
+    plt.xlabel(xLabel)
+    plt.hist(KangarooDegrees,bins = 'auto')
     #lt.show()
 
     #Part C Find the Path between 2 abritrary vertices in the largest CC
+    # Creating two arbritrary nodes making sure they aren't the same number
     Node1 = random.randrange(1,27,1)
     Node2 = random.randrange(1,27,1)
     while Node1 == Node2:
@@ -114,40 +131,75 @@ def main():
 
     # I put a cutoff on the list of simple paths for now so I can atleast run something
     # cut off is the act of only focusing on the paths <= 5
+    # This section creates a list of all simple paths and then creates a list with the lengths of these paths
     BisonPaths = list(nx.all_simple_paths(BisonGraph,Node1,Node2,cutoff = 5))
-    BisonLens = []
+    BisonP_Lengths = []
 
     for node in range(0,len(BisonPaths)-1):
-        BisonLens.append(len(BisonPaths[node]))
+        BisonP_Lengths.append(len(BisonPaths[node]))
 
+    xLabel = Stats(BisonP_Lengths)
+
+    # Creating a histogram for the degrees of the graph
     plt.figure(5)
     plt.title('Part C: Histogram Directed Bison Paths')
-    plt.hist(BisonLens, bins = 5)
-    #lt.show()
+    plt.xlabel(xLabel)
+    plt.hist(BisonP_Lengths, bins = 'auto')
+    #plt.show()
 
+    # Creating two arbritrary nodes making sure they aren't the same number
     Node1 = random.randrange(1,17,1)
     Node2 = random.randrange(1,17,1)
     while Node1 == Node2:
         Node1 = random.randrange(1,17,1)
 
+    # This section creates a list of all simple paths and then creates a list with the lengths of these paths
     KangarooPaths = list(nx.all_simple_paths(KangarooGraph,Node1,Node2,cutoff = 5))
-    KangarooLens = []
+    KangarooP_Lengths = []
 
     for node in range(0,len(KangarooPaths)-1):
-        KangarooLens.append(len(KangarooPaths[node]))
+        KangarooP_Lengths.append(len(KangarooPaths[node]))
 
+    xLabel = Stats(KangarooP_Lengths)
+
+    # Creating a histogram for the degrees of the graph
     plt.figure(6)
     plt.title('Part C: Histogram Undirected Kangaroo Paths')
-    plt.hist(KangarooLens, bins = 5)
+    plt.xlabel(xLabel)
+    plt.hist(KangarooP_Lengths, bins = 'auto')
 
     #plt.show()
 
     # Part D Find the Simple Circuits between 2 abritrary vertices in the largest CC
-    # This will Tell us how many simple circuits are in the Bison Network I can't do a cut of on this but
-    # I am very confident it work.
-    #print(len(list(nx.simple_cycles(BisonGraph))))
+    # UNABLE TO RUN BISON CIRCUITS ON LAPTOP THERE ARE TO MANY AND I CANNOT CREATE A CUTOFF
 
-    # SKIPPING PART D FOR NOW
+    # Creates a list of simple cycles and then creates another list of the lengths of the cycles
+    # BisonCircuits = list(nx.simple_cycles(BisonGraph))
+    # BisonC_Lengths = []
+    # for node in range(0,len(BisonCircuits)-1):
+    #    BisonC_Lengths.append(len(BisonCircuits[node]))
+    #
+    # xLabel = Stats(BisonC_Lengths)
+    #
+    # plt.figure(7)
+    # plt.title('PART D: Histogram Directed Bison Circuits)
+    # plt.xlabel(xLabel)
+    # plt.hist(BisonC_Lengths, bins = 'auto')
+
+    # You can't use the simple cycle function for undirected graphs so I used the basis function.
+    # Creates a list of simple cycles and then creates another list of the lengths of the cycles
+    KangarooCircuits = nx.cycle_basis(KangarooGraph)
+    KangarooC_Lengths = []
+    for node in range(0,len(KangarooCircuits)-1):
+       KangarooC_Lengths.append(len(KangarooCircuits[node]))
+
+    xLabel = Stats(KangarooC_Lengths)
+    plt.figure(7)
+    plt.title('PART D: Histogram Undirected Kangaroo Circuits')
+    plt.xlabel(xLabel)
+    plt.hist(KangarooC_Lengths, bins = 'auto')
+    #plt.show()
+
 
     # Part E Check if Eulerian, Find a Eulerian Path
     print("\nPART E:")
@@ -218,6 +270,34 @@ def main():
     TreeOrForest(Kangaroo_MinTree)
 
     #Part I: Dijkstra's Algorithm
+
+    BisonPairs = list(nx.all_pairs_node_connectivity(BisonGraph))
+    ConnectedNodes = []
+    for i in BisonPairs:
+        for j in BisonPairs:
+            if BisonGraph.has_edge(i,j+1):
+                ConnectedNodes.append([i,j+1])
+
+    # I don't understand why its registering the input of the append as a list? the dj path length function returns a number.
+    # dijkstra_Paths = []
+    # for i in ConnectedNodes:
+    #     for j in range(1,2):
+    #         dijkstra_Paths.append(int(nx.dijkstra_path_length(BisonGraph,ConnectedNodes[i][j],ConnectedNodes[i][j+1])))
+    #
+    # xLabel = Stats(dijkstra_Paths)
+    #
+    # plt.figure()
+    # plt.xlabel(xLabel)
+    # plt.title('Directed Bison Dijkstra Path Lengths')
+    # plt.hist(dijkstra_Paths)
+    # plt.show()
+
+    # I am very sorry I don't really know how to do the matrix part
+
+    # For showing the matrix as an image use plt.matshow( NAME OF MATRIX )
+
+    # Repeat for Kangaroo Undirected
+
 
 
 
