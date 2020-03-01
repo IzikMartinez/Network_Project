@@ -224,22 +224,26 @@ def main():
     plt.matshow(KangarooMatrix)
     #plt.show()
 
-    # Part G: Copy Largest CC comparing it to a copy and a slightly differnt CC
+    # Part G: Copy Largest CC comparing it to a copy and a slightly different CC
     print("\nPart G:\n")
+    # copying the largest connected component from the Bison Directed graph
     BisonN1 = nx.Graph()
     LargestCCBison = list(max(nx.weakly_connected_components(BisonGraph), key=len))
     for i in LargestCCBison:
         BisonN1.add_edge(i,i+1)
     BisonN2 = BisonN1.copy()
 
+    # Checking Equivalence between copied graphs
     print("Is BisonN1 Equivalent to BisonN2?")
     Compare(BisonN1,BisonN2)
 
+    # Checking Equivalence between copied graphs but one has an extra 10 edges
     print("\nIs BisonN1 Equivalent to N3?")
     BisonN3 = BisonN2.copy()
     Add10Edges(BisonN3,len(BisonN3))
     Compare(BisonN1,BisonN3)
 
+    # Repeat for Kangaroo Undirected Network
     KangarooN1 = nx.Graph()
     LargestCCKangaroo = list(max(nx.connected_components(KangarooGraph), key=len))
     for i in LargestCCKangaroo:
@@ -254,12 +258,16 @@ def main():
     Add10Edges(KangarooN3,len(KangarooN3))
     Compare(KangarooN1,KangarooN3)
 
+
     #Part H: Generate Minimum Spanning Tree
     print("\nPart H:\n")
-
+    # Cannot generate SPanning tree for Directed netowrks
+    # Generating a minimum spanning tree for Undirected network
     Kangaroo_MinTree = nx.minimum_spanning_tree(KangarooGraph)
     print("~A Minimum Spanning Tree was created for the Undirected Kangaroo Graph~")
     TreeOrForest(Kangaroo_MinTree)
+
+    # Finding two random nodes that are connected
     x = 0
     y = 0
     while(not(Kangaroo_MinTree.has_edge(x,y))):
@@ -268,6 +276,7 @@ def main():
         while x == y:
             x = random.randrange(1,17,1)
 
+    # Removing the found edge
     print("\nAn edge from the spanning tree was removed")
     Kangaroo_MinTree.remove_edge(x,y)
     TreeOrForest(Kangaroo_MinTree)
