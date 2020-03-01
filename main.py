@@ -32,13 +32,14 @@ def CreateNetwork (Graph,File,flag):
     nx.draw_networkx_edges(Graph, pos, width=1)
     #plt.show()
 
-#A funciton to check is two graphs are isomorphic AKA equivalent
+#Compare: A funciton to check is two graphs are isomorphic AKA equivalent
 def Compare(G1,G2,):
     if nx.is_isomorphic(G1,G2):
         print("These Graphs are Equivalent")
     else:
         print("These Graphs are NOT Equivalent")
 
+# Add10Edges: adds ten edges to a graph based on two arbritary integers
 def Add10Edges(Graph,size):
     for i in range(1,10):
         x = random.randrange(1,size,1)
@@ -47,6 +48,7 @@ def Add10Edges(Graph,size):
             x = random.randrange(1,size,1)
         Graph.add_edge(x,y)
 
+# Tree Or Forest: Checks if a graph is a tree forest for neither
 def TreeOrForest(Graph):
     if nx.is_tree(Graph):
         print("The Minimum Spanning Tree Generated from this Network is a Tree")
@@ -55,6 +57,7 @@ def TreeOrForest(Graph):
     else:
         print("Neither a Tree nor Forest")
 
+# Stats: computes mean and standard deviations creating a label out of the two
 def Stats(LIST):
     mean = stat.mean(LIST)
     std_Deviation = stat.stdev(LIST)
