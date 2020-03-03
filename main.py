@@ -185,7 +185,7 @@ def main():
     # xLabel = Stats(BisonC_Lengths)
     #
     # plt.figure(7)
-    # plt.title('PART D: Histogram Directed Bison Circuits)
+    # plt.title('PART D: Histogram Directed Bison Circuits')
     # plt.xlabel(xLabel)
     # plt.hist(BisonC_Lengths, bins = 'auto')
 
@@ -291,20 +291,23 @@ def main():
                 ConnectedNodes.append([i,j+1])
 
     # I don't understand why its registering the input of the append as a list? the dj path length function returns a number.
-    # dijkstra_Paths = []
-    # for i in ConnectedNodes:
-    #     for j in range(1,2):
-    #         dijkstra_Paths.append(int(nx.dijkstra_path_length(BisonGraph,ConnectedNodes[i][j],ConnectedNodes[i][j+1])))
-    #
-    # xLabel = Stats(dijkstra_Paths)
-    #
-    # plt.figure()
-    # plt.xlabel(xLabel)
-    # plt.title('Directed Bison Dijkstra Path Lengths')
-    # plt.hist(dijkstra_Paths)
+    dijkstra_Paths = []
+    length = len(ConnectedNodes)
+    for i in range(0,length-1):
+        for j in range(0, 1):
+            dijkstra_Paths.append(int(nx.dijkstra_path_length(BisonGraph,ConnectedNodes[i][j],ConnectedNodes[i][j+1])))
+
+    xLabel = Stats(dijkstra_Paths)
+
+    plt.figure()
+    plt.xlabel(xLabel)
+    plt.title('Directed Bison Dijkstra Path Lengths')
+    plt.hist(dijkstra_Paths)
     # plt.show()
+
     #
-    # I am very sorry I don't really know how to do the matrix part
+    # BisonDistanceMatrix = nx.to_numpy_matrix(dijkstra_Paths)
+    # plt.matshow(BisonDistanceMatrix)
 
     # For showing the matrix as an image use plt.matshow( NAME OF MATRIX )
 
