@@ -9,17 +9,17 @@ import statistics as stat
 # in the Kangaroo and Bison Network files.
 # Parameters: The Imported, created Graph and The Lines from that Graph
 
-def CreateNetwork (Graph,File,flag):
-    Opened_File = open(File, 'r')
-    Lines = Opened_File.readlines()
+def create_network(graph, file, flag):
+    opened_file = open(file, 'r')
+    lines = opened_file.readlines()
 
-    for ln in Lines[2:-1]:
-        Start_node = int(ln.split(' ')[0])
-        End_node = int(ln.split(' ')[1])
-        Edge_length = float(ln.split(' ')[2])
-        Graph.add_edge(Start_node, End_node, weight=Edge_length)
+    for ln in lines[2:-1]:
+        start_node = int(ln.split(' ')[0])
+        end_node = int(ln.split(' ')[1])
+        edge_length = float(ln.split(' ')[2])
+        graph.add_edge(start_node, end_node, weight=edge_length)
 
-    pos = nx.spring_layout(Graph)
+    pos = nx.spring_layout(graph)
     if flag == True:
         plt.figure(1)
         plt.title('Directed Bison graph')
@@ -27,294 +27,302 @@ def CreateNetwork (Graph,File,flag):
         plt.figure(2)
         plt.title('Undirected Kangaroo graph')
     # Nodes
-    nx.draw_networkx_nodes(Graph, pos, node_size=50)
+    nx.draw_networkx_nodes(graph, pos, node_size=50)
     # Edges
-    nx.draw_networkx_edges(Graph, pos, width=1)
-    #plt.show()
+    nx.draw_networkx_edges(graph, pos, width=1)
+    # plt.show()
 
-#Compare: A funciton to check is two graphs are isomorphic AKA equivalent
-def Compare(G1,G2,):
-    if nx.is_isomorphic(G1,G2):
-        print("These Graphs are Equivalent")
+
+# Compare: A function to check is two graphs are isomorphic AKA equivalent
+
+def compare(g1, g2):
+    if nx.is_isomorphic(g1, g2):
+        print("These graphs are Equivalent")
     else:
-        print("These Graphs are NOT Equivalent")
+        print("These graphs are NOT Equivalent")
+
 
 # Add10Edges: adds ten edges to a graph based on two arbritary integers
-def Add10Edges(Graph,size):
-    for i in range(1,10):
-        x = random.randrange(1,size,1)
-        y = random.randrange(1,size,1)
+def add_10_edges(graph, size):
+    for i in range(1, 10):
+        x = random.randrange(1, size, 1)
+        y = random.randrange(1, size, 1)
         while x == y:
-            x = random.randrange(1,size,1)
-        Graph.add_edge(x,y)
+            x = random.randrange(1, size, 1)
+        graph.add_edge(x, y)
+
 
 # Tree Or Forest: Checks if a graph is a tree forest for neither
-def TreeOrForest(Graph):
-    if nx.is_tree(Graph):
+def tree_or_forest(graph):
+    if nx.is_tree(graph):
         print("The Minimum Spanning Tree Generated from this Network is a Tree")
-    elif nx.is_forest(Graph):
+    elif nx.is_forest(graph):
         print("The Minimum Spanning Tree Generated from this Network is a Forest")
     else:
         print("Neither a Tree nor Forest")
 
+
 # Stats: computes mean and standard deviations creating a label out of the two
-def Stats(LIST):
-    mean = stat.mean(LIST)
-    std_Deviation = stat.stdev(LIST)
-    xLabel = 'Mean = ' + str(mean) + ' & Standard Deviation = ' + str(std_Deviation)
-    return xLabel
+def stats(data):
+    mean = stat.mean(data)
+    std_deviation = stat.stdev(data)
+    x_label = 'Mean = ' + str(mean) + ' & Standard Deviation = ' + str(std_deviation)
+    return x_label
+
 
 # Main Function for the program.
 def main():
-    #Directed Bison Network
-    BisonFile = 'moreno_bison/out.moreno_bison_bison'
-    BisonGraph = nx.DiGraph()
+    # Directed Bison Network
+    bison_file = 'moreno_bison/out.moreno_bison_bison'
+    bison_graph = nx.DiGraph()
 
-    BisonNetwork = CreateNetwork(BisonGraph,BisonFile,True)
+    create_network(bison_graph, bison_file, True)
 
-    #Undirected Kangaroo Network
-    KangarooFile = 'moreno_kangaroo/out.moreno_kangaroo_kangaroo'
-    KangarooGraph = nx.Graph()
+    # Undirected Kangaroo Network
+    kangaroo_file = 'moreno_kangaroo/out.moreno_kangaroo_kangaroo'
+    kangaroo_graph = nx.Graph()
 
-    KangaroonNetwork = CreateNetwork(KangarooGraph,KangarooFile,False)
+    create_network(kangaroo_graph, kangaroo_file, False)
 
     # Part A: Connected Component Analysis
     # Connected Component Analysis of Bison Directed Graph
     print("PART A:\n")
     print("Bison Directed Graph Connected Component Analysis",
-          "\nWeakly connected: ", nx.is_weakly_connected(BisonGraph),
-          "\nNumber of Weakly CCs: ", nx.number_weakly_connected_components(BisonGraph),
-          "\nSize of largest CC: ", len(max(nx.weakly_connected_components(BisonGraph), key=len)),
-          "\nSize of smallest CC: ", len(min(nx.weakly_connected_components(BisonGraph), key=len)))
+          "\nWeakly connected: ", nx.is_weakly_connected(bison_graph),
+          "\nNumber of Weakly CCs: ", nx.number_weakly_connected_components(bison_graph),
+          "\nSize of largest CC: ", len(max(nx.weakly_connected_components(bison_graph), key=len)),
+          "\nSize of smallest CC: ", len(min(nx.weakly_connected_components(bison_graph), key=len)))
 
     # Connected Component Analysis of Kangaroo Undirected Graph
     print("\nKangaroo Undirected Graph Connected Component Analysis",
-          "\nConnected: ", nx.is_connected(KangarooGraph),
-          "\nNumber of CCs: ", nx.number_connected_components(KangarooGraph),
-          "\nSize of largest CC: ", len(max(nx.connected_components(KangarooGraph), key=len)),
-          "\nSize of smallest CC: ", len(min(nx.connected_components(KangarooGraph), key=len)))
-
+          "\nConnected: ", nx.is_connected(kangaroo_graph),
+          "\nNumber of CCs: ", nx.number_connected_components(kangaroo_graph),
+          "\nSize of largest CC: ", len(max(nx.connected_components(kangaroo_graph), key=len)),
+          "\nSize of smallest CC: ", len(min(nx.connected_components(kangaroo_graph), key=len)))
 
     # Part B Computing Degrees and finding the Probability distribution
     # Creation of an arrayList to store the degree for each node of Bison Network
-    BisonDegrees = []
-    for node in range(1,26):
-        BisonDegrees.append(BisonGraph.degree(node))
+    bison_degrees = []
+    for node in range(1, 26):
+        bison_degrees.append(bison_graph.degree(node))
 
     # Computing Mean and Standard Deviation for Directed
-    xLabel = Stats(BisonDegrees)
+    x_label = stats(bison_degrees)
 
     # Creating a Histogram to plot the data of the degrees Bison Network
     plt.figure(3)
     plt.title('Part B: Histogram Directed Bison')
-    plt.xlabel(xLabel)
-    plt.hist(BisonDegrees,bins = 'auto')
+    plt.xlabel(x_label)
+    plt.hist(bison_degrees, bins='auto')
 
     # Creation of an arrayList to store the degree for each node of Kangaroo Network
-    KangarooDegrees = []
-    for node in range(1,17):
-        KangarooDegrees.append(KangarooGraph.degree(node))
+    kangaroo_degrees = []
+    for node in range(1, 17):
+        kangaroo_degrees.append(kangaroo_graph.degree(node))
 
     # Computing Mean and Standard Deviation for Undirected
-    xLabel = Stats(KangarooDegrees)
+    x_label = stats(kangaroo_degrees)
 
     # Creating a Histogram to plot the data of the degrees for Kangaroo Network
     plt.figure(4)
     plt.title('Part B: Histogram Undirected Kangaroo')
-    plt.xlabel(xLabel)
-    plt.hist(KangarooDegrees,bins = 'auto')
-    #lt.show()
+    plt.xlabel(x_label)
+    plt.hist(kangaroo_degrees, bins='auto')
+    # lt.show()
 
-    #Part C Find the Path between 2 abritrary vertices in the largest CC
+    # Part C Find the Path between 2 abritrary vertices in the largest CC
     # Creating two arbritrary nodes making sure they aren't the same number
-    Node1 = random.randrange(1,27,1)
-    Node2 = random.randrange(1,27,1)
-    while Node1 == Node2:
-        Node1 = random.randrange(1,27,1)
+    node1 = random.randrange(1, 27, 1)
+    node2 = random.randrange(1, 27, 1)
+    while node1 == node2:
+        node1 = random.randrange(1, 27, 1)
 
     # I put a cutoff on the list of simple paths for now so I can atleast run something
     # cut off is the act of only focusing on the paths <= 5
     # This section creates a list of all simple paths and then creates a list with the lengths of these paths
-    BisonPaths = list(nx.all_simple_paths(BisonGraph,Node1,Node2,cutoff = 5))
-    BisonP_Lengths = []
+    bison_paths = list(nx.all_simple_paths(bison_graph, node1, node2, cutoff=5))
+    bison_p_lengths = []
 
-    for node in range(0,len(BisonPaths)-1):
-        BisonP_Lengths.append(len(BisonPaths[node]))
+    for node in range(0, len(bison_paths) - 1):
+        bison_p_lengths.append(len(bison_paths[node]))
 
-    xLabel = Stats(BisonP_Lengths)
+    x_label = stats(bison_p_lengths)
 
     # Creating a histogram for the degrees of the graph
     plt.figure(5)
     plt.title('Part C: Histogram Directed Bison Paths')
-    plt.xlabel(xLabel)
-    plt.hist(BisonP_Lengths, bins = 'auto')
-    plt.show()
+    plt.xlabel(x_label)
+    plt.hist(bison_p_lengths, bins='auto')
+    # plt.show()
 
-    # Creating two arbritrary nodes making sure they aren't the same number
-    Node1 = random.randrange(1,17,1)
-    Node2 = random.randrange(1,17,1)
-    while Node1 == Node2:
-        Node1 = random.randrange(1,17,1)
+    # Creating two arbitrary nodes making sure they aren't the same number
+    node1 = random.randrange(1, 17, 1)
+    node2 = random.randrange(1, 17, 1)
+    while node1 == node2:
+        node1 = random.randrange(1, 17, 1)
 
     # This section creates a list of all simple paths and then creates a list with the lengths of these paths
-    KangarooPaths = list(nx.all_simple_paths(KangarooGraph,Node1,Node2,cutoff = 5))
-    KangarooP_Lengths = []
+    kangaroo_paths = list(nx.all_simple_paths(kangaroo_graph, node1, node2, cutoff=5))
+    kangaroo_p_lengths = []
 
-    for node in range(0,len(KangarooPaths)-1):
-        KangarooP_Lengths.append(len(KangarooPaths[node]))
+    for node in range(0, len(kangaroo_paths) - 1):
+        kangaroo_p_lengths.append(len(kangaroo_paths[node]))
 
-    xLabel = Stats(KangarooP_Lengths)
+    x_label = stats(kangaroo_p_lengths)
 
     # Creating a histogram for the degrees of the graph
     plt.figure(6)
     plt.title('Part C: Histogram Undirected Kangaroo Paths')
-    plt.xlabel(xLabel)
-    plt.hist(KangarooP_Lengths, bins = 'auto')
+    plt.xlabel(x_label)
+    plt.hist(kangaroo_p_lengths, bins='auto')
 
-    plt.show()
-
-    # Part D Find the Simple Circuits between 2 arbitrary vertices in the largest CC
-    # UNABLE TO RUN BISON CIRCUITS ON LAPTOP THERE ARE TO MANY AND I CANNOT CREATE A CUTOFF
-    #
-    # Creates a list of simple cycles and then creates another list of the lengths of the cycles
-    # BisonCircuits = list(nx.simple_cycles(BisonGraph))
-    # BisonC_Lengths = []
-    # for node in range(0,len(BisonCircuits)-1):
-    #    BisonC_Lengths.append(len(BisonCircuits[node]))
-    #
-    # xLabel = Stats(BisonC_Lengths)
-    # plt.figure(7)
-    # plt.title('PART D: Histogram Directed Bison Circuits')
-    # plt.xlabel(xLabel)
-    # plt.hist(BisonC_Lengths, bins = 'auto')
-    #
-    # # You can't use the simple cycle function for undirected graphs so I used the basis function.
-    # # Creates a list of simple cycles and then creates another list of the lengths of the cycles
-    # KangarooCircuits = nx.cycle_basis(KangarooGraph)
-    # KangarooC_Lengths = []
-    # for node in range(0,len(KangarooCircuits)-1):
-    #    KangarooC_Lengths.append(len(KangarooCircuits[node]))
-    #
-    # xLabel = Stats(KangarooC_Lengths)
-    # plt.figure(7)
-    # plt.title('PART D: Histogram Undirected Kangaroo Circuits')
-    # plt.xlabel(xLabel)
-    # plt.hist(KangarooC_Lengths, bins = 'auto')
     # plt.show()
 
+    # Part D Find the Simple Circuits between 2 abritrary vertices in the largest CC
+    # UNABLE TO RUN BISON CIRCUITS ON LAPTOP THERE ARE TO MANY AND I CANNOT CREATE A CUTOFF
+
+    # Creates a list of simple cycles and then creates another list of the lengths of the cycles
+    # bison_circuits = list(nx.simple_cycles(bison_graph))
+    # bison_c_lengths = []
+    # for node in range(0,len(bison_circuits)-1):
+    #    bison_c_lengths.append(len(bison_circuits[node]))
+    #
+    # x_label = stats(bison_c_lengths)
+    #
+    # plt.figure(7)
+    # plt.title('PART D: Histogram Directed Bison Circuits')
+    # plt.xlabel(x_label)
+    # plt.hist(bison_c_lengths, bins = 'auto')
+
+    # You can't use the simple cycle function for undirected graphs so I used the basis function.
+    # Creates a list of simple cycles and then creates another list of the lengths of the cycles
+    kangaroo_circuits = nx.cycle_basis(kangaroo_graph)
+    kangaroo_c_lengths = []
+    for node in range(0, len(kangaroo_circuits) - 1):
+        kangaroo_c_lengths.append(len(kangaroo_circuits[node]))
+
+    x_label = stats(kangaroo_c_lengths)
+    plt.figure(7)
+    plt.title('PART D: Histogram Undirected Kangaroo Circuits')
+    plt.xlabel(x_label)
+    plt.hist(kangaroo_c_lengths, bins='auto')
+    # plt.show()
 
     # Part E Check if Eulerian, Find a Eulerian Path
     print("\nPART E:")
     print("\nDirected Bison Graph")
-    print("Euelerian: ", nx.is_eulerian(BisonGraph))
-    print("Has a Eulerian Path: ", nx.has_eulerian_path(BisonGraph))
+    print("Euelerian: ", nx.is_eulerian(bison_graph))
+    print("Has a Eulerian Path: ", nx.has_eulerian_path(bison_graph))
 
     print("\nUndirected Kangaroo Graph")
-    print("Euelerian: ", nx.is_eulerian(KangarooGraph))
-    print("Has a Eulerian Path: ", nx.has_eulerian_path(KangarooGraph))
+    print("Euelerian: ", nx.is_eulerian(kangaroo_graph))
+    print("Has a Eulerian Path: ", nx.has_eulerian_path(kangaroo_graph))
 
     # Part F: Convert to Matrix.
-    #I don't know if this covers everything?
-    BisonMatrix = nx.to_numpy_matrix(BisonGraph)
-    plt.matshow(BisonMatrix)
-    plt.show()
+    # I don't know if this covers everything?
+    bison_matrix = nx.to_numpy_matrix(bison_graph)
+    plt.matshow(bison_matrix)
+    # plt.show()
 
-    KangarooMatrix = nx.to_numpy_matrix(KangarooGraph)
-    plt.matshow(KangarooMatrix)
-    plt.show()
+    kangaroo_matrix = nx.to_numpy_matrix(kangaroo_graph)
+    plt.matshow(kangaroo_matrix)
+    # plt.show()
 
     # Part G: Copy Largest CC comparing it to a copy and a slightly different CC
     print("\nPart G:\n")
     # copying the largest connected component from the Bison Directed graph
-    BisonN1 = nx.Graph()
-    LargestCCBison = list(max(nx.weakly_connected_components(BisonGraph), key=len))
-    for i in LargestCCBison:
-        BisonN1.add_edge(i,i+1)
-    BisonN2 = BisonN1.copy()
+    bison_n1 = nx.Graph()
+    largest_cc_bison = list(max(nx.weakly_connected_components(bison_graph), key=len))
+    for i in largest_cc_bison:
+        bison_n1.add_edge(i, i + 1)
+    bison_n2 = bison_n1.copy()
 
     # Checking Equivalence between copied graphs
-    print("Is BisonN1 Equivalent to BisonN2?")
-    Compare(BisonN1,BisonN2)
+    print("Is bison_n1 Equivalent to bison_n2?")
+    compare(bison_n1, bison_n2)
 
     # Checking Equivalence between copied graphs but one has an extra 10 edges
-    print("\nIs BisonN1 Equivalent to N3?")
-    BisonN3 = BisonN2.copy()
-    Add10Edges(BisonN3,len(BisonN3))
-    Compare(BisonN1,BisonN3)
+    print("\nIs bison_n1 Equivalent to N3?")
+    bison_n3 = bison_n2.copy()
+    add_10_edges(bison_n3, len(bison_n3))
+    compare(bison_n1, bison_n3)
 
     # Repeat for Kangaroo Undirected Network
-    KangarooN1 = nx.Graph()
-    LargestCCKangaroo = list(max(nx.connected_components(KangarooGraph), key=len))
-    for i in LargestCCKangaroo:
-        KangarooN1.add_edge(i,i+1)
-    KangarooN2 = KangarooN1.copy()
+    kangaroo_n1 = nx.Graph()
+    largest_cc_kangaroo = list(max(nx.connected_components(kangaroo_graph), key=len))
+    for i in largest_cc_kangaroo:
+        kangaroo_n1.add_edge(i, i + 1)
+    kangaroo_n2 = kangaroo_n1.copy()
 
-    print("\nIs KangarooN1 Equivalent to KangarooN2?")
-    Compare(KangarooN1,KangarooN2)
+    print("\nIs kangaroo_n1 Equivalent to kangaroo_n2?")
+    compare(kangaroo_n1, kangaroo_n2)
 
-    print("\nIs KangarooN1 Equivalent to N3?")
-    KangarooN3 = KangarooN2.copy()
-    Add10Edges(KangarooN3,len(KangarooN3))
-    Compare(KangarooN1,KangarooN3)
+    print("\nIs kangaroo_n1 Equivalent to N3?")
+    kangaroo_n3 = kangaroo_n2.copy()
+    add_10_edges(kangaroo_n3, len(kangaroo_n3))
+    compare(kangaroo_n1, kangaroo_n3)
 
-
-    #Part H: Generate Minimum Spanning Tree
+    # Part H: Generate Minimum Spanning Tree
     print("\nPart H:\n")
-    # Cannot generate SPanning tree for Directed netowrks
+    # Cannot generate SPanning tree for Directed networks
     # Generating a minimum spanning tree for Undirected network
-    Kangaroo_MinTree = nx.minimum_spanning_tree(KangarooGraph)
+    kangaroo_min_tree = nx.minimum_spanning_tree(kangaroo_graph)
     print("~A Minimum Spanning Tree was created for the Undirected Kangaroo Graph~")
-    TreeOrForest(Kangaroo_MinTree)
+    tree_or_forest(kangaroo_min_tree)
 
     # Finding two random nodes that are connected
     x = 0
     y = 0
-    while(not(Kangaroo_MinTree.has_edge(x,y))):
-        x = random.randrange(1,17,1)
-        y = random.randrange(1,17,1)
+    while (not (kangaroo_min_tree.has_edge(x, y))):
+        x = random.randrange(1, 17, 1)
+        y = random.randrange(1, 17, 1)
         while x == y:
-            x = random.randrange(1,17,1)
+            x = random.randrange(1, 17, 1)
 
     # Removing the found edge
     print("\nAn edge from the spanning tree was removed")
-    Kangaroo_MinTree.remove_edge(x,y)
-    TreeOrForest(Kangaroo_MinTree)
+    kangaroo_min_tree.remove_edge(x, y)
+    tree_or_forest(kangaroo_min_tree)
 
-    #Part I: Dijkstra's Algorithm
+    # Part I: Dijkstra's Algorithm
 
-    #Create list of all paired nodes
-    BisonPairs = list(nx.all_pairs_node_connectivity(BisonGraph))
-    ConnectedNodes = []
-    for i in BisonPairs:
-        for j in BisonPairs:
-            if BisonGraph.has_edge(i,j+1):
-                ConnectedNodes.append([i,j+1])
-    #Create list of distance between each of the connected nodes
-    dijkstra_Paths = []
-    length = len(ConnectedNodes)
-    for i in range(0, length):
-        dijkstra_Paths.append(int(nx.dijkstra_path_length(BisonGraph,ConnectedNodes[i][0],ConnectedNodes[i][1])))
+    bison_pairs = list(nx.all_pairs_node_connectivity(bison_graph))
+    connected_nodes = []
+    for i in bison_pairs:
+        for j in bison_pairs:
+            if bison_graph.has_edge(i, j + 1):
+                connected_nodes.append([i, j + 1])
 
-    xLabel = Stats(dijkstra_Paths)
+    dijkstra_paths = []
+    length = len(connected_nodes)
+    for i in range(0, length - 1):
+        for j in range(0, 1):
+            dijkstra_paths.append(
+                int(nx.dijkstra_path_length(bison_graph, connected_nodes[i][j], connected_nodes[i][j + 1])))
+
+    x_label = stats(dijkstra_paths)
 
     plt.figure()
-    plt.xlabel(xLabel)
+    plt.xlabel(x_label)
     plt.title('Directed Bison Dijkstra Path Lengths')
-    plt.hist(dijkstra_Paths)
-    plt.show()
+    plt.hist(dijkstra_paths)
+    # plt.show()
 
-    # Created a new temporary graph with edges from the connected nodes and weights from the distance list
+    #Created a new temporary graph with edges from the connected nodes and weights from the distance list
     temp_bison = nx.DiGraph()
     for i in range(0, length - 1):
         j = 0
-        temp_bison.add_edge(ConnectedNodes[i][j], ConnectedNodes[i][j + 1], weight=dijkstra_Paths[i])
+        temp_bison.add_edge(connected_nodes[i][j], connected_nodes[i][j + 1], weight=dijkstra_paths[i])
 
+    # I dont really know if this creates a matrix for the weigths this is just what i did in a previous part
     bison_distance_matrix = nx.to_numpy_matrix(temp_bison)
     plt.matshow(bison_distance_matrix)
     plt.show()
 
-
     # Repeat for Kangaroo Undirected
+
+
+
     KangarooPairs = list(nx.all_pairs_node_connectivity(KangarooGraph))
     ConnectedNodesK = []
     for i in KangarooPairs:
